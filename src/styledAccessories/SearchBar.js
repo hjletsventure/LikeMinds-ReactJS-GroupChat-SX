@@ -49,11 +49,9 @@ function SearchField({ closeSearchField }) {
           </InputAdornment>
         ),
         endAdornment: (
-
-          <CloseIcon style={{
-            fontSize: "12px"
-          }} />
-
+          <IconButton onClick={closeSearchField}>
+            <CloseIcon />
+          </IconButton>
         ),
         sx: {
           fontFamily: 'Lato'
@@ -64,7 +62,7 @@ function SearchField({ closeSearchField }) {
           }
         }
       }}
-      className="bg-white p-0"
+      className="rounded-[12px] bg-white p-0"
       sx={{
         fontFamily: 'Lato'
       }}

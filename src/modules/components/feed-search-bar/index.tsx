@@ -1,12 +1,14 @@
-import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
-import filterIcon from "../../../assets/svg/menu.svg";
-import searchIcon from "../../../assets/svg/searchBoxIcon.svg";
-import { myClient } from "../../..";
-import SearchBarContainer from "./searchbarContainer";
+import { Box, IconButton, InputAdornment, TextField } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import filterIcon from '../../../assets/svg/menu.svg';
+import searchIcon from '../../../assets/svg/searchBoxIcon.svg';
+import { myClient } from '../../..';
+import SearchBarContainer from './searchbarContainer';
+import { CT_EVENTS } from '../../../../analytics/clevertap/constants';
+import CleverTap from '../../../../analytics/clevertap/CleverTap';
 
 const Searchbar = () => {
-  const [searchString, setSearchString] = useState("");
+  const [searchString, setSearchString] = useState('');
   const [searchResultObject, setSearchResultObject] = useState<any>([]);
   const [showSearchContainer, setShowSearchContainer] = useState(false);
   const [shouldShowLoading, setShouldShowLoading] = useState(true);
@@ -17,41 +19,41 @@ const Searchbar = () => {
         setShowSearchContainer(false);
       }
     };
-    document.addEventListener("click", handleClickOutside, true);
+    document.addEventListener('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener("click", handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
   });
   useEffect(() => {
     const searchTimeOut = setTimeout(async () => {
       try {
-        if (searchString === "") {
+        if (searchString === '') {
           return;
         }
         setShouldShowLoading(true);
         const callFollowed = await myClient.searchChatroom({
-          followStatus: true,
+          follow_status: true,
           search: searchString,
-          pageSize: 200,
+          page_size: 200,
           page: 1,
-          searchType: "header",
+          search_type: 'header'
         });
         const callUnFollowed = await myClient.searchChatroom({
-          followStatus: false,
+          follow_status: false,
           search: searchString,
-          pageSize: 200,
+          page_size: 200,
           page: 1,
-          searchType: "header",
+          search_type: 'header'
         });
         const obj = [];
-        obj[0] = { "Followed Groups": callFollowed?.data?.chatrooms };
-        obj[1] = { "Other Groups": callUnFollowed?.data?.chatrooms };
+        obj[0] = { 'Followed Groups': callFollowed.chatrooms };
+        obj[1] = { 'Other Groups': callUnFollowed.chatrooms };
 
         setSearchResultObject(obj);
         setShouldShowLoading(false);
-        // // // console.log(obj);
+        // // console.log(obj);
       } catch (error) {
-        // // // console.log(error);
+        // // console.log(error);
       }
     }, 500);
 
@@ -61,14 +63,11 @@ const Searchbar = () => {
   }, [searchString]);
 
   useEffect(() => {
-    // // // console.log(showSearchContainer);
+    // // console.log(showSearchContainer);
   }, [showSearchContainer]);
   return (
     <div>
-      <Box
-        ref={ref}
-        className="p-[20px] pb-6 flex justify-between relative z-10"
-      >
+      <Box ref={ref} className="p-[20px] pb-6 flex justify-between relative z-10">
         <TextField
           autoComplete="off"
           fullWidth
@@ -85,16 +84,21 @@ const Searchbar = () => {
                 </InputAdornment>
               ) : null,
             sx: {
-              fontFamily: "Lato",
-              borderRadius: "10px",
-              border: "1px solid #EEEEEE",
+              fontFamily: 'Lato',
+              borderRadius: '10px',
+              border: '1px solid #EEEEEE'
               // width: "370px",
             },
-            className: "bg-[#F5F5F5] font-[300] text-[14px] h-[48px] w-[100%]",
+            className: 'bg-[#F5F5F5] font-[300] text-[14px] h-[48px] w-[100%]'
           }}
           placeholder="Search for groups"
           value={searchString}
           onChange={(e) => {
+            if (location?.pathname?.includes('/community/groups/main/')) {
+              CleverTap.pushEvents(CT_EVENTS.NETWORK.GROUP.SEARCH, { search: e.target.value });
+            } else if (location?.pathname?.endsWith('/community/direct-messages')) {
+              CleverTap.pushEvents(CT_EVENTS.NETWORK.CHAT.SEARCH, { search: e.target.value });
+            }
             setSearchString(e.target.value);
           }}
           onFocus={() => {
@@ -107,30 +111,25 @@ const Searchbar = () => {
       </Box>
       <div
         style={{
-          display:
-            showSearchContainer && searchString.length > 0 ? "block" : "none",
-          backgroundColor: "rgba(0,0,0,0.5)",
-          height: "100%",
-          width: "100%",
-          position: "fixed",
-          top: "0",
-          left: "0",
-          zIndex: "9",
+          display: showSearchContainer && searchString.length > 0 ? 'block' : 'none',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          height: '100%',
+          width: '100%',
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          zIndex: '9'
         }}
       />
       <div
         style={{
-          display:
-            showSearchContainer && searchString.length > 0 ? "block" : "none",
-          position: "absolute",
+          display: showSearchContainer && searchString.length > 0 ? 'block' : 'none',
+          position: 'absolute',
           zIndex: 10,
-          width: "100%",
+          width: '100%'
         }}
       >
-        <SearchBarContainer
-          searchResults={searchResultObject}
-          shouldShowLoading={shouldShowLoading}
-        />
+        <SearchBarContainer searchResults={searchResultObject} shouldShowLoading={shouldShowLoading} />
       </div>
     </div>
   );

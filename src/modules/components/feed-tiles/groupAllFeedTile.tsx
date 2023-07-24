@@ -2,6 +2,7 @@ import { Button, Typography } from "@mui/material";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { groupMainPath } from "../../../routes";
+import ForumManager from "../../../../modules/community/managers/ForumManager";
 import { joinChatRoom } from "../../../sdkFunctions";
 import { FeedContext } from "../../contexts/feedContext";
 import { GeneralContext } from "../../contexts/generalContext";
@@ -24,19 +25,25 @@ const GroupAllFeedTile = ({
   const feedContext = useContext(FeedContext);
   const userContext = useContext(UserContext);
   const routeContext = useContext(RouteContext);
+  const forumManager = new ForumManager();
   const generalContext = useContext(GeneralContext);
   const navigate = useNavigate();
   async function joinGroup() {
     try {
       const call = await joinChatRoom(chatroomId, userContext.currentUser.id);
-      // chatroomContext.refreshChatroomContext();
+      if (!call.error)
+        forumManager.updateUserForumInfo({
+          group: { name: groupTitle, id: chatroomId },
+          follow: true,
+          communityIds: [userContext?.currentUser?.user_unique_id],
+        });
       const joinEvent = new CustomEvent("joinEvent", { detail: chatroomId });
       document.dispatchEvent(joinEvent);
       if (!call.error) {
         navigate(`${groupMainPath}/${chatroomId}`);
       }
     } catch (error) {
-      // // // console.log(error);
+      // // console.log(error);
     }
   }
 
