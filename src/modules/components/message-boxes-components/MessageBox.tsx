@@ -27,6 +27,8 @@ import { GeneralContext } from "../../contexts/generalContext";
 import AttachmentsHolder from "./AttachmentsHolder";
 import MediaCarousel from "../carousel";
 import routeVariable from "../../../enums/routeVariables";
+import CleverTap from "../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
 
 async function getChatroomConversations(
   chatroomId: any,
@@ -385,6 +387,14 @@ const MoreOptions = ({ convoId, convoObject, index }: moreOptionsType) => {
     {
       title: "Reply",
       clickFunction: () => {
+        if (mode == "groups") {
+          CleverTap.pushEvents(
+            CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_REPLY_INITIATE,
+            {
+              groupName: generalContext?.currentChatroom?.header,
+            }
+          );
+        }
         chatroomContext.setIsSelectedConversation(true);
         chatroomContext.setSelectedConversation(convoObject);
       },
@@ -392,6 +402,14 @@ const MoreOptions = ({ convoId, convoObject, index }: moreOptionsType) => {
     {
       title: "Report",
       clickFunction: () => {
+        if (mode == "groups") {
+          CleverTap.pushEvents(
+            CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_REPORT_INITIATE,
+            {
+              groupName: generalContext?.currentChatroom?.header,
+            }
+          );
+        }
         setShouldShowBlock(!shouldShow);
       },
     },
@@ -412,6 +430,14 @@ const MoreOptions = ({ convoId, convoObject, index }: moreOptionsType) => {
       title: "Reply Privately",
       clickFunction: async () => {
         try {
+          if (mode == "groups") {
+            CleverTap.pushEvents(
+              CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_PRIVATE_REPLY_INITIATE,
+              {
+                groupName: generalContext?.currentChatroom?.header,
+              }
+            );
+          }
           const checkDMLimitCall: any = await myClient.checkDMLimit({
             memberId: convoObject?.member?.id,
           });
@@ -532,7 +558,14 @@ const MoreOptions = ({ convoId, convoObject, index }: moreOptionsType) => {
         <ReportConversationDialogBox
           convoId={convoId}
           onClick={onClickhandlerReport}
+          title={generalContext?.currentChatroom?.header}
           closeBox={() => {
+            CleverTap.pushEvents(
+              CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_REPORT_ABANDON,
+              {
+                groupName: generalContext?.currentChatroom?.header,
+              }
+            );
             setShouldShowBlock(false);
           }}
           reportedMemberId={convoObject.member?.member_id}

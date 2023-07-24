@@ -5,6 +5,8 @@ import React, { useContext } from "react";
 import { getString, linkConverter, tagExtracter } from "../../../sdkFunctions";
 import parse from "html-react-parser";
 import { UserContext } from "../../contexts/userContext";
+import CleverTap from "../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
 type ReplyBoxType = {
   openReplyBox: boolean;
   memberName: string;
@@ -12,6 +14,7 @@ type ReplyBoxType = {
   setIsSelectedConversation: any;
   setSelectedConversation: any;
   attachments?: any;
+  title: string;
 };
 
 const ReplyBox: React.FC<ReplyBoxType> = ({
@@ -56,6 +59,12 @@ const ReplyBox: React.FC<ReplyBoxType> = ({
       <div>
         <IconButton
           onClick={() => {
+            CleverTap.pushEvents(
+              CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_REPLY_ABANDON,
+              {
+                groupName: title,
+              }
+            );
             setIsSelectedConversation(false);
             setSelectedConversation({});
           }}

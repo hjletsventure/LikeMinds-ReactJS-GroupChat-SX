@@ -4,6 +4,8 @@ import filterIcon from "../../../assets/svg/menu.svg";
 import searchIcon from "../../../assets/svg/searchBoxIcon.svg";
 import { myClient } from "../../..";
 import SearchBarContainer from "./searchbarContainer";
+import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../analytics/clevertap/CleverTap";
 
 const Searchbar = () => {
   const [searchString, setSearchString] = useState("");
@@ -95,6 +97,17 @@ const Searchbar = () => {
           placeholder="Search for groups"
           value={searchString}
           onChange={(e) => {
+            if (location?.pathname?.includes("/community/groups/main/")) {
+              CleverTap.pushEvents(CT_EVENTS.NETWORK.GROUP.SEARCH, {
+                search: e.target.value,
+              });
+            } else if (
+              location?.pathname?.endsWith("/community/direct-messages")
+            ) {
+              CleverTap.pushEvents(CT_EVENTS.NETWORK.CHAT.SEARCH, {
+                search: e.target.value,
+              });
+            }
             setSearchString(e.target.value);
           }}
           onFocus={() => {

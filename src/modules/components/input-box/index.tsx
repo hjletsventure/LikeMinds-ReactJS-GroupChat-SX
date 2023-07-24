@@ -26,6 +26,8 @@ import InputFieldContext from "../../contexts/inputFieldContext";
 import { INPUT_BOX_DEBOUNCE_TIME } from "../../constants/constants";
 import { GeneralContext } from "../../contexts/generalContext";
 import routeVariable from "../../../enums/routeVariables";
+import CleverTap from "../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
 
 const Input = ({ setBufferMessage, disableInputBox }: any) => {
   const [messageText, setMessageText] = useState("");
@@ -172,6 +174,7 @@ const InputSearchField = ({ setBufferMessage, disableInputBox }: any) => {
       {/* for adding reply */}
       {chatroomContext.isSelectedConversation ? (
         <ReplyBox
+          title={generalContext?.currentChatroom?.header}
           openReplyBox={chatroomContext.isSelectedConversation}
           memberName={chatroomContext.selectedConversation?.member?.name}
           answer={chatroomContext.selectedConversation?.answer}
@@ -190,14 +193,17 @@ const InputSearchField = ({ setBufferMessage, disableInputBox }: any) => {
           onClick={() => {
             // console.log(generalContext.currentChatroom);
             sendMessage(
-              generalContext?.currentChatroom?.chat_request_state,
+              chatroomContext.isSelectedConversation,
+              generalContext?.currentChatroom?.header,
+              generalContext.currentChatroom.chat_request_state,
               chatRequestVariable,
               chatroomContext,
               parseInt(id, 10),
               inputFieldContext,
               setBufferMessage,
               setEnableInputBox,
-              mode
+              mode,
+              generalContext
             ).then(() => {
               if (!generalContext.currentChatroom?.follow_status) {
               }
@@ -270,6 +276,8 @@ const InputSearchField = ({ setBufferMessage, disableInputBox }: any) => {
             } else if (keyObj.enter === true && keyObj.shift === false) {
               e.preventDefault();
               sendMessage(
+                chatroomContext.isSelectedConversation,
+                generalContext?.currentChatroom?.header,
                 generalContext.currentChatroom.chat_request_state,
                 chatRequestVariable,
                 chatroomContext,
@@ -277,7 +285,8 @@ const InputSearchField = ({ setBufferMessage, disableInputBox }: any) => {
                 inputFieldContext,
                 setBufferMessage,
                 setEnableInputBox,
-                mode
+                mode,
+                generalContext
               );
             }
           }}
@@ -436,6 +445,41 @@ const OptionButtonBox = ({ icon, accept, setFile, file }: any) => {
           multiple
           accept={accept}
           onChange={(e) => {
+            if (fileType == "doc") {
+              if (isDirectChat) {
+                CleverTap.pushEvents(
+                  CT_EVENTS.NETWORK.CHAT.COMMENT_DOCUMENT_INITIATE,
+                  props
+                );
+              } else {
+                CleverTap.pushEvents(
+                  CT_EVENTS.NETWORK.GROUP.JOINIED_GROUP_COMMENT_DOCUMENT_INIATE,
+                  props
+                );
+              }
+            } else if (fileType == "video") {
+              if (isDirectChat) {
+                CleverTap.pushEvents(
+                  CT_EVENTS.NETWORK.CHAT.COMMENT_IMAGE_INITIATE,
+                  props
+                );
+              } else {
+                CleverTap.pushEvents(
+                  CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_COMMENT_IMAGE_INITATE
+                );
+              }
+            } else if (fileType == "audio") {
+              if (isDirectChat) {
+                CleverTap.pushEvents(
+                  CT_EVENTS.NETWORK.CHAT.COMMENT_VOICE_INITIATE,
+                  props
+                );
+              } else {
+                CleverTap.pushEvents(
+                  CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_COMMENT_VOICE_INITATE
+                );
+              }
+            }
             setFile(e.target.files);
           }}
         />

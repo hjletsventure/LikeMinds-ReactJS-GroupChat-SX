@@ -7,22 +7,21 @@ import { UserContext } from "./modules/contexts/userContext";
 import { log } from "./sdkFunctions";
 import { initiateSDK, retrieveMemberStates } from "./sdkFunctions/clientSetup";
 
-function App() {
+function App(props: any) {
   const [currentUser, setCurrentUser] = useState<any>({});
   const [community, setCommunity] = useState();
+  const { user } = props;
 
   useEffect(() => {
-    const initiateClient = async () => {
-      try {
-        let call: any = await initiateSDK(false, "", "");
-        setCommunity(call?.data?.community);
-        setCurrentUser(call?.data?.user);
-        sessionStorage.setItem("communityId", call?.data?.community?.id);
-      } catch (error) {
+    initiateSDK(false, user?.communityId, "")
+      .then((res: any) => {
+        setCommunity(res?.data?.community);
+        setCurrentUser(res?.data?.user);
+        sessionStorage.setItem("communityId", res?.data?.community?.id);
+      })
+      .catch((error: any) => {
         log(error);
-      }
-    };
-    initiateClient();
+      });
   }, []);
   useEffect(() => {
     async function settingMemberState() {

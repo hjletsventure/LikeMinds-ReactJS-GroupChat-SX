@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ChatContainer from ".";
 import ChatroomContext from "../../contexts/chatroomContext";
 import { GeneralContext } from "../../contexts/generalContext";
@@ -10,7 +10,8 @@ import { UserContext } from "../../contexts/userContext";
 import GroupInfo from "../chatroom-info";
 import routeVariable from "../../../enums/routeVariables";
 import { log } from "../../../sdkFunctions";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import UserProfileView from "../../../../modules/common/userProfileView";
 import ChannelSearch from "../channel-search";
 
 const getChatroomComponents = (operation: string) => {
@@ -40,6 +41,8 @@ const ChatroomWrapper: React.FC = () => {
   const generalContext = useContext(GeneralContext);
   const userContext = useContext(UserContext);
   const params = useParams();
+  const navigate = useNavigate();
+  const { status } = params;
   const id = params[routeVariable.id];
   const mode = params[routeVariable.mode];
   const operation = params[routeVariable.operation];
@@ -94,7 +97,17 @@ const ChatroomWrapper: React.FC = () => {
       }}
     >
       {!openSearch ? (
-        Object.keys(generalContext?.currentChatroom).length ? (
+        mode !== "groups" && operation === "personal-info" ? (
+          <Box mt="-2rem" ml="2rem">
+            <UserProfileView
+              userData={{ user_unique_id: status }}
+              callBack={() =>
+                navigate(`/community/direct-message/main/${status}`)
+              }
+              callBackButtonText="Message"
+            />
+          </Box>
+        ) : Object.keys(generalContext?.currentChatroom).length ? (
           <>
             <Tittle
               title={getChatroomDisplayName()}

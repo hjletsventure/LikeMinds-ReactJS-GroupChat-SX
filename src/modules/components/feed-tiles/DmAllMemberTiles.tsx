@@ -15,6 +15,8 @@ import {
 } from "../../../sdkFunctions";
 import { GeneralContext } from "../../contexts/generalContext";
 // import { DmContext } from "./DirectMessagesMain";
+import CleverTap from "../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
 
 export async function reqDM(
   profile: any,
@@ -122,6 +124,7 @@ const DmMemberTile = ({ profile }: any) => {
           ":hover": { background: "grey" },
         }}
         onClick={() => {
+          CleverTap.pushEvents(CT_EVENTS.NETWORK.CHAT.MESSAGE_CLICK);
           dmContext.setShowLoadingBar(true);
           reqDM(
             profile,
@@ -160,6 +163,9 @@ const DmMemberTile = ({ profile }: any) => {
           }}
           variant="outlined"
           // onClick={routeToProfile}
+          onClick={() => {
+            CleverTap.pushEvents(CT_EVENTS.NETWORK.CHAT.VIEW_PROFILE_CLICK);
+          }}
         >
           View Profile
         </Button>

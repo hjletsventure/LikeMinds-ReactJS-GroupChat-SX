@@ -4,17 +4,22 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
 import { getReportingOptions } from "../../../sdkFunctions";
 
+import CleverTap from "../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
+
 type ReportConversationDialogBoxType = {
   convoId: any;
   onClick: any;
   closeBox: any;
   reportedMemberId: any;
+  title: string;
 };
 const ReportConversationDialogBox = ({
   convoId,
   onClick,
   closeBox,
   reportedMemberId,
+  title,
 }: ReportConversationDialogBoxType) => {
   const [reasonArr, setReasonArr] = useState([]);
   useEffect(() => {
@@ -46,6 +51,7 @@ const ReportConversationDialogBox = ({
               <ReportedReasonBlock
                 id={item?.id}
                 name={item?.name}
+                title={title}
                 conversationid={convoId}
                 onClickhandler={onClick}
                 reportedMemberId={reportedMemberId}
@@ -61,6 +67,7 @@ const ReportConversationDialogBox = ({
 type ReasonType = {
   id: any;
   name: any;
+  title: string;
   onClickhandler: any;
   conversationid: any;
   reportedMemberId: any;
@@ -74,6 +81,10 @@ const ReportedReasonBlock = ({
 }: ReasonType) => (
   <div
     onClick={() => {
+      CleverTap.pushEvents(
+        CT_EVENTS.NETWORK.GROUP.JOINED_GROUP_REPORT_COMPLETE,
+        { reason: name, groupName: title }
+      );
       onClickhandler(id, name, conversationid, reportedMemberId);
     }}
     className="inline-block border rounded-[20px] py-2 px-3 mr-2 mb-2 text-sm text=[#9b9b9b]"
