@@ -16,7 +16,7 @@ export const eventsPath = mainPath + '/events';
 // path for dms
 export const directMessagePath = `${mainPath}/direct-messages`;
 export const directMessageChatPath = `${directMessagePath}/main`;
-export const directMessageInfoPath = `${directMessagePath}/info`;
+export const directMessageInfoPath = `${directMessagePath}/personal-info`;
 export const directMessageAcceptInvitePath = `${directMessagePath}/accept-invite`;
 // export cont DmMainPath = directMessagePath + "/"
 

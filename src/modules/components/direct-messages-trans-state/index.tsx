@@ -62,7 +62,7 @@ export const AcceptTheirInviteFirst = ({ title }: any) => {
       generalContext.setCurrentChatroom(newChatroomObject?.data?.chatroom);
       generalContext.setCurrentProfile(newChatroomObject?.data);
     } catch (error) {
-      // // console.log(error);
+      // console.log(error);
     }
   }
 
@@ -73,9 +73,16 @@ export const AcceptTheirInviteFirst = ({ title }: any) => {
       generalContext.setCurrentChatroom(newChatroomObject?.data?.chatroom);
       generalContext.setCurrentProfile(newChatroomObject?.data);
     } catch (error) {
-      // // // console.log(error);
+      // // console.log(error);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      generalContext.setCurrentChatroom({});
+      generalContext.setCurrentProfile({});
+    };
+  }, [mode]);
 
   return (
     <div className="h-full">
@@ -145,8 +152,8 @@ export const AcceptTheirInviteFirst = ({ title }: any) => {
               onClick={() => {
                 myClient
                   .inviteAction({
-                    channelId: id!,
-                    inviteStatus: 1,
+                    channel_id: id!,
+                    invite_status: 1,
                   })
                   .then(() => {
                     generalContext.setShowSnackBar(true);

@@ -1,11 +1,10 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react/require-default-props */
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Feeds from "../components/feedlist/Feed";
-import routeVariable from "../../enums/routeVariables";
-import { log } from "../../sdkFunctions";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Feeds from '../components/feedlist/Feed';
+import routeVariable from '../../enums/routeVariables';
 
 type childrenType = {
   children?: any;
@@ -31,13 +30,19 @@ const FeedContextProvider: React.FC<childrenType> = () => {
         return null;
     }
   };
-  // useEffect(() => {
-  //   log(`setting homefeed ${7}`);
-  //   setHomeFeed([]);
-  //   setAllFeed([]);
-  //   setSecretChatrooms([]);
-  //   setModeCounter(0);
-  // }, [mode]);
+  useEffect(() => {
+    setHomeFeed([]);
+    setAllFeed([]);
+    setSecretChatrooms([]);
+    setModeCounter(0);
+  }, [mode]);
+  useEffect(() => {
+    if (modeCounter === 0) {
+      if (homeFeed.length === 0 && allFeed.length === 0 && secretChatrooms.length === 0) {
+        setModeCounter(1);
+      }
+    }
+  });
   return (
     <FeedContext.Provider
       value={{
@@ -50,7 +55,7 @@ const FeedContextProvider: React.FC<childrenType> = () => {
         setAllFeed,
         setSecretChatrooms,
         setDmHomeFeed,
-        setDmAllFeed,
+        setDmAllFeed
       }}
     >
       {/* {setComponent()} */}
@@ -82,7 +87,7 @@ export const FeedContext = React.createContext<feedContext>({
   setAllFeed: null,
   setSecretChatrooms: null,
   setDmHomeFeed: null,
-  setDmAllFeed: null,
+  setDmAllFeed: null
 });
 
 export default FeedContextProvider;

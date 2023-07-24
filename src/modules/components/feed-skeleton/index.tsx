@@ -1,6 +1,5 @@
-import { Skeleton } from "@mui/material";
-import { useEffect, useState } from "react";
-import { events } from "../../../enums/events";
+import { Skeleton } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 const SkeletonFeed = () => {
   const [removeFeed, setRemoveFeed] = useState(false);
@@ -8,9 +7,9 @@ const SkeletonFeed = () => {
     setRemoveFeed(true);
   }
   useEffect(() => {
-    document.addEventListener(events.feedLoaded, changeSkeleton);
+    document.addEventListener('feedLoaded', changeSkeleton);
     return () => {
-      document.removeEventListener(events.feedLoaded, changeSkeleton);
+      document.removeEventListener('feedLoaded', changeSkeleton);
     };
   });
   if (removeFeed) {

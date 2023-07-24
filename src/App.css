@@ -19,14 +19,8 @@
   background: #666;
 }
 
-.App {
-}
-.MuiOutlinedInput-notchedOutline {
-  border: none !important;
-}
-
 .customHeight {
-  height: calc(100% - 65px);
+  height: calc(100%);
 }
 
 .customScroll {

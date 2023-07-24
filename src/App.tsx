@@ -1,57 +1,48 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { useEffect, useState } from "react";
-import "./App.css";
-import RouteProvider from "./modules/components/routes";
-import { UserContext } from "./modules/contexts/userContext";
-import { log } from "./sdkFunctions";
-import { initiateSDK, retrieveMemberStates } from "./sdkFunctions/clientSetup";
+import { useEffect, useState } from 'react';
+import './App.css';
+import RouteProvider from './modules/components/routes';
+import { UserContext } from './modules/contexts/userContext';
+import { initiateSDK, log } from './sdkFunctions';
+import { myClient } from '.';
 
-function App() {
+function App(props: any) {
   const [currentUser, setCurrentUser] = useState<any>({});
   const [community, setCommunity] = useState();
+  const { user } = props;
 
   useEffect(() => {
-    const initiateClient = async () => {
-      try {
-        let call: any = await initiateSDK(false, "", "");
-        setCommunity(call?.data?.community);
-        setCurrentUser(call?.data?.user);
-        sessionStorage.setItem("communityId", call?.data?.community?.id);
-      } catch (error) {
+    initiateSDK(false, user?.communityId, '')
+      .then((res: any) => {
+        setCommunity(res?.data?.community);
+        setCurrentUser(res?.data?.user);
+        sessionStorage.setItem('communityId', res?.data?.community?.id);
+      })
+      .catch((error) => {
         log(error);
-      }
-    };
-    initiateClient();
+      });
   }, []);
   useEffect(() => {
-    async function settingMemberState() {
-      try {
-        if (
-          currentUser?.id === undefined ||
-          currentUser.memberRights !== undefined
-        ) {
-          return null;
-        }
-        if (currentUser?.memberState !== undefined) {
-          return null;
-        }
-        const res: any = await retrieveMemberStates(currentUser.id);
-
-        let newUserObject = { ...currentUser };
-
-        newUserObject.memberState = res?.data?.member?.state;
-        newUserObject.memberRights = res?.data?.member_rights;
-
-        setCurrentUser(newUserObject);
-      } catch (error) {
-        log(error);
-      }
+    if (currentUser?.memberState !== undefined) {
+      return;
     }
-    settingMemberState();
+    if (currentUser?.id === undefined) {
+      return;
+    }
+    myClient
+      .getMemberState({
+        memberId: currentUser?.id
+      })
+      .then((res: any) => {
+        let newUserObject = { ...currentUser };
+        newUserObject.memberState = res?.member?.state;
+        newUserObject.memberRights = res?.member_rights;
+        setCurrentUser(newUserObject);
+      });
   }, [currentUser]);
 
-  if (currentUser?.id === null || currentUser?.id === undefined) {
+  if (currentUser?.id === undefined || currentUser.memberState === undefined) {
     return null;
   }
 
@@ -61,7 +52,7 @@ function App() {
         currentUser,
         setCurrentUser,
         community,
-        setCommunity,
+        setCommunity
       }}
     >
       <RouteProvider />
