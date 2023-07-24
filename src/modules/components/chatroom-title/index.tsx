@@ -10,8 +10,8 @@ import routeVariable from "../../../enums/routeVariables";
 import searchIcon from "./../../../assets/svg/search.svg";
 import { useState } from "react";
 import ChannelSearch from "../channel-search";
-import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
-import CleverTap from "../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../../analytics/clevertap/CleverTap";
 
 type propsTitle = {
   title: any;

@@ -21,9 +21,9 @@ import { GeneralContext } from "../modules/contexts/generalContext";
 import MemberDialogBox from "../modules/components/members-dialog-box";
 import routeVariable from "../enums/routeVariables";
 import { events } from "../enums/events";
-import ForumManager from "../../modules/community/managers/ForumManager";
-import { CT_EVENTS } from "../../analytics/clevertap/constants";
-import CleverTap from "../../analytics/clevertap/CleverTap";
+import ForumManager from "../../../modules/community/managers/ForumManager";
+import { CT_EVENTS } from "../../../analytics/clevertap/constants";
+import CleverTap from "../../../analytics/clevertap/CleverTap";
 
 export function MoreOptions() {
   const [open, setOpen] = useState(false);

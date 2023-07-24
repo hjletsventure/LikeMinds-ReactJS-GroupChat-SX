@@ -5,8 +5,8 @@ import React, { useContext } from "react";
 import { getString, linkConverter, tagExtracter } from "../../../sdkFunctions";
 import parse from "html-react-parser";
 import { UserContext } from "../../contexts/userContext";
-import CleverTap from "../../../../analytics/clevertap/CleverTap";
-import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../../analytics/clevertap/constants";
 type ReplyBoxType = {
   openReplyBox: boolean;
   memberName: string;

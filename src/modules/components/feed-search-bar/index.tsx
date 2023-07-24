@@ -4,8 +4,8 @@ import filterIcon from "../../../assets/svg/menu.svg";
 import searchIcon from "../../../assets/svg/searchBoxIcon.svg";
 import { myClient } from "../../..";
 import SearchBarContainer from "./searchbarContainer";
-import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
-import CleverTap from "../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../../analytics/clevertap/CleverTap";
 
 const Searchbar = () => {
   const [searchString, setSearchString] = useState("");

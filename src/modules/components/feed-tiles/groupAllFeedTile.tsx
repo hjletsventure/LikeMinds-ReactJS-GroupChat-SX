@@ -7,7 +7,7 @@ import { FeedContext } from "../../contexts/feedContext";
 import { GeneralContext } from "../../contexts/generalContext";
 import { RouteContext } from "../../contexts/routeContext";
 import { UserContext } from "../../contexts/userContext";
-import ForumManager from "../../../../modules/community/managers/ForumManager";
+import ForumManager from "../../../../../modules/community/managers/ForumManager";
 
 type GroupAllFeedTileProps = {
   groupTitle: any;

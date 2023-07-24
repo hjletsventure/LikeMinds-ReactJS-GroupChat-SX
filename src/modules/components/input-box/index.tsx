@@ -26,8 +26,8 @@ import InputFieldContext from "../../contexts/inputFieldContext";
 import { INPUT_BOX_DEBOUNCE_TIME } from "../../constants/constants";
 import { GeneralContext } from "../../contexts/generalContext";
 import routeVariable from "../../../enums/routeVariables";
-import CleverTap from "../../../../analytics/clevertap/CleverTap";
-import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../../analytics/clevertap/constants";
 
 const Input = ({ setBufferMessage, disableInputBox }: any) => {
   const [messageText, setMessageText] = useState("");

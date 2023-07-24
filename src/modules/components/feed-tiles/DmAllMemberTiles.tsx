@@ -15,8 +15,8 @@ import {
 } from "../../../sdkFunctions";
 import { GeneralContext } from "../../contexts/generalContext";
 // import { DmContext } from "./DirectMessagesMain";
-import CleverTap from "../../../../analytics/clevertap/CleverTap";
-import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../../analytics/clevertap/constants";
 
 export async function reqDM(
   profile: any,

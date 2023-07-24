@@ -13,8 +13,8 @@ import {
   LAST_CONVERSATION_ID_FORWARD,
 } from "../../../enums/localStorageConstants";
 
-import CleverTap from "../../../../analytics/clevertap/CleverTap";
-import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../../analytics/clevertap/constants";
 
 type ConversationCreateData = {
   chatroom_id: any;

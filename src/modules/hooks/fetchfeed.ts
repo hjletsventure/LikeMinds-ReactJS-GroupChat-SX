@@ -14,7 +14,7 @@ import {
 import { FeedContext } from "../contexts/feedContext";
 import { GeneralContext } from "../contexts/generalContext";
 import routeVariable from "../../enums/routeVariables";
-import ForumManager from "../../../modules/community/managers/ForumManager";
+import ForumManager from "../../../../modules/community/managers/ForumManager";
 
 type feedArrayContent = {
   header: string;

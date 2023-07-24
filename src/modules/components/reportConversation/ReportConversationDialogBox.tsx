@@ -4,8 +4,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
 import { getReportingOptions } from "../../../sdkFunctions";
 
-import CleverTap from "../../../../analytics/clevertap/CleverTap";
-import { CT_EVENTS } from "../../../../analytics/clevertap/constants";
+import CleverTap from "../../../../../analytics/clevertap/CleverTap";
+import { CT_EVENTS } from "../../../../../analytics/clevertap/constants";
 
 type ReportConversationDialogBoxType = {
   convoId: any;
