@@ -1,11 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { useEffect, useState } from "react";
-import "./App.css";
-import RouteProvider from "./modules/components/routes";
-import { UserContext } from "./modules/contexts/userContext";
-import { log } from "./sdkFunctions";
-import { initiateSDK, retrieveMemberStates } from "./sdkFunctions/clientSetup";
+import { useEffect, useState } from 'react';
+import './App.css';
+import RouteProvider from './modules/components/routes';
+import { UserContext } from './modules/contexts/userContext';
+import { log } from './sdkFunctions';
+import { initiateSDK, retrieveMemberStates } from './sdkFunctions/clientSetup';
 
 function App(props: any) {
   const [currentUser, setCurrentUser] = useState<any>({});
@@ -13,11 +13,11 @@ function App(props: any) {
   const { user } = props;
 
   useEffect(() => {
-    initiateSDK(false, user?.communityId, "")
+    initiateSDK(false, user?.communityId, '')
       .then((res: any) => {
         setCommunity(res?.data?.community);
         setCurrentUser(res?.data?.user);
-        sessionStorage.setItem("communityId", res?.data?.community?.id);
+        sessionStorage.setItem('communityId', res?.data?.community?.id);
       })
       .catch((error: any) => {
         log(error);
@@ -26,10 +26,7 @@ function App(props: any) {
   useEffect(() => {
     async function settingMemberState() {
       try {
-        if (
-          currentUser?.id === undefined ||
-          currentUser.memberRights !== undefined
-        ) {
+        if (currentUser?.id === undefined || currentUser.memberRights !== undefined) {
           return null;
         }
         if (currentUser?.memberState !== undefined) {
@@ -60,7 +57,7 @@ function App(props: any) {
         currentUser,
         setCurrentUser,
         community,
-        setCommunity,
+        setCommunity
       }}
     >
       <RouteProvider />

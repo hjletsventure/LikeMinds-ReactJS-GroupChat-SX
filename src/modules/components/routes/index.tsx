@@ -1,25 +1,11 @@
-import { Route, Routes } from "react-router-dom";
-import Switch from "../switch";
-import routeVariable from "../../../enums/routeVariables";
+import { Box } from '@mui/system';
+import Switch from '../switch';
 
 const RouteProvider: React.FC = () => {
   return (
-    <Routes>
-      <Route path="community/" element={<Switch />} />
-      <Route path={`community/:${routeVariable.mode}`} element={<Switch />} />
-      <Route
-        path={`community/:${routeVariable.mode}/:${routeVariable.operation}`}
-        element={<Switch />}
-      />
-      <Route
-        path={`community/:${routeVariable.mode}/:${routeVariable.operation}/:${routeVariable.id}`}
-        element={<Switch />}
-      />
-      <Route
-        path={`community/:${routeVariable.mode}/:${routeVariable.operation}/:${routeVariable.id}/:${routeVariable.replyPrivatelyVariable}`}
-        element={<Switch />}
-      />
-    </Routes>
+    <Box m="-2.5rem 0 -2.875rem -2.875rem" style={{ height: 'calc(100vh - 65px)' }}>
+      <Switch />
+    </Box>
   );
 };
 

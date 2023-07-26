@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useContext, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import ChatContainer from '.';
 import ChatroomContext from '../../contexts/chatroomContext';
 import { GeneralContext } from '../../contexts/generalContext';
@@ -9,8 +8,8 @@ import SelectChatroom from '../select-chatroom';
 import { UserContext } from '../../contexts/userContext';
 import GroupInfo from '../chatroom-info';
 import routeVariable from '../../../enums/routeVariables';
-import { log } from '../../../sdkFunctions';
-import { Box, Button } from '@mui/material';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { Box } from '@mui/material';
 import UserProfileView from '../../../../../modules/common/userProfileView';
 import ChannelSearch from '../channel-search';
 
@@ -36,8 +35,8 @@ const ChatroomWrapper: React.FC = () => {
   const [isSelectedConversation, setIsSelectedConversation] = useState(false);
   const [showReplyPrivately, setShowReplyPrivately] = useState(false);
   const [replyPrivatelyMode, setReplyPrivatelyMode] = useState(null);
-  const [showTitle, setShowTitle] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
+  const { state } = useLocation();
   const generalContext = useContext(GeneralContext);
   const userContext = useContext(UserContext);
   const params = useParams();
@@ -75,10 +74,11 @@ const ChatroomWrapper: React.FC = () => {
     generalContext.setSnackBarMessage('');
   }
   useEffect(() => {
+    if (operation === 'personal-info') generalContext.setShowLoadingBar(false);
     return () => {
       resetChatroomContext();
     };
-  }, [mode]);
+  }, [mode, id]);
 
   return (
     <ChatroomContext.Provider
@@ -100,11 +100,11 @@ const ChatroomWrapper: React.FC = () => {
           <Box mt="-2rem" ml="2rem">
             <UserProfileView
               userData={{ user_unique_id: status }}
-              callBack={() => navigate(`/community/direct-message/main/${status}`)}
+              callBack={() => navigate(`/community/direct-messages/main/${state?.chatroomId}`)}
               callBackButtonText="Message"
             />
           </Box>
-        ) : Object.keys(generalContext?.currentChatroom).length ? (
+        ) : Object?.keys(generalContext?.currentChatroom || {})?.length ? (
           <>
             <Tittle
               title={getChatroomDisplayName()}
